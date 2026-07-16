@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'gcc main.c file1.c -o app'
+                sh 'gcc hello.c file1.c -o app'
             }
         }
 
