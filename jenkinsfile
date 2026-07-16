@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/harikaburada2003/practice.git'
+            }
+        }
+
+        stage('Show Files') {
+            steps {
+                sh 'pwd'
+                sh 'ls -l'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'gcc main.c file1.c -o app'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh './app'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                mkdir -p deployment
+                cp app deployment/
+                ls -l deployment
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            archiveArtifacts artifacts: 'deployment/app'
+            echo 'Pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed.'
+        }
+
+        always {
+            echo 'Pipeline execution finished.'
+        }
+    }
+}
